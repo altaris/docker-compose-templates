@@ -1,0 +1,25 @@
+version: "3.5"
+
+volumes:
+  mariadb-data:
+
+services:
+  mariadb:
+    environment:
+      MARIADB_DATABASE: ${MARIADB_DATABASE}
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD}
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
+      MARIADB_USER: ${MARIADB_USER}
+    image: mariadb:latest
+    volumes:
+      - mariadb-data:/var/lib/mysql
+  phpmyadmin:
+    depends_on:
+      - mariadb
+    environment:
+      PMA_HOST: mariadb
+      PMA_PORT: 3306
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - 8080:80
+    restart: on-failure:5
