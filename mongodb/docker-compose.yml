@@ -1,0 +1,36 @@
+version: "3.5"
+
+volumes:
+  mongo-conf:
+  mongo-data:
+
+services:
+  mongo:
+    container_name: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+    image: mongo
+    volumes:
+      - mongo-conf:/data/configdb
+      - mongo-data:/data/db
+  mongo-express:
+    container_name: mongo-express
+    depends_on:
+      - mongo
+    environment:
+      ME_CONFIG_BASICAUTH_USERNAME: ${ME_CONFIG_BASICAUTH_USERNAME}
+      ME_CONFIG_BASICAUTH_PASSWORD: ${ME_CONFIG_BASICAUTH_PASSWORD}
+      # ME_CONFIG_MONGODB_ENABLE_ADMIN: false
+      # ME_CONFIG_MONGODB_AUTH_DATABASE:
+      # ME_CONFIG_MONGODB_AUTH_USERNAME: ${ME_CONFIG_MONGODB_AUTH_USERNAME}
+      # ME_CONFIG_MONGODB_AUTH_PASSWORD: ${ME_CONFIG_MONGODB_AUTH_PASSWORD}
+      ME_CONFIG_MONGODB_ENABLE_ADMIN: true
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      ME_CONFIG_MONGODB_PORT: 27017
+      ME_CONFIG_MONGODB_SERVER: mongo
+    image: mongo-express
+    ports:
+      - 8080:8081
+    restart: on-failure:5
