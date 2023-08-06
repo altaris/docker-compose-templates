@@ -1,0 +1,18 @@
+version: "3.5"
+
+volumes:
+  portainer-data:
+
+services:
+  portainer:
+    command: --no-analytics
+    container_name: portainer
+    image: portainer/portainer-ce
+    ports:
+      - 9000:9000
+    restart: always
+    security_opt:
+      - no-new-privileges
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer-data:/data
