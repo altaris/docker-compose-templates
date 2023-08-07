@@ -1,3 +1,8 @@
+# mongo-express is accessible via http://mongo-express-STACK_NAME.localhost .
+# By default, `STACK_NAME` is the directory name, so `mongodb` in this case:
+# http://mongo-express-mongodb.localhost . Likewise, the traefik dashboard is
+# at http://traefik-mongodb.localhost
+
 version: "3.5"
 
 volumes:
@@ -6,7 +11,6 @@ volumes:
 
 services:
   mongo:
-    container_name: mongo
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
@@ -15,7 +19,6 @@ services:
       - mongo-conf:/data/configdb
       - mongo-data:/data/db
   mongo-express:
-    container_name: mongo-express
     depends_on:
       - mongo
     environment:
@@ -31,6 +34,18 @@ services:
       ME_CONFIG_MONGODB_PORT: 27017
       ME_CONFIG_MONGODB_SERVER: mongo
     image: mongo-express
-    ports:
-      - 8080:8081
+    labels:
+      traefik.http.services.mongo-express.loadbalancer.server.port: 8081
+    # ports:
+    #   - 8080:8081
+    # mongo-express fails if it can't reach mongo immediately
     restart: on-failure:5
+  traefik:
+    image: traefik
+    labels:
+      traefik.http.routers.traefik-http.service: api@internal
+    ports:
+      - 80:80
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik.yml:/etc/traefik/traefik.yml:ro

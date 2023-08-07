@@ -1,3 +1,8 @@
+# phpmyadmin is accessible via http://phpmyadmin-STACK_NAME.localhost . By
+# default, `STACK_NAME` is the directory name, so `mariadb` in this case:
+# http://phpmyadmin-mariadb.localhost . Likewise, the traefik dashboard is at
+# http://traefik-mariadb.localhost
+
 version: "3.5"
 
 volumes:
@@ -20,6 +25,14 @@ services:
       PMA_HOST: mariadb
       PMA_PORT: 3306
     image: phpmyadmin/phpmyadmin
+    # ports:
+    #   - 8080:80
+  traefik:
+    image: traefik
+    labels:
+      traefik.http.routers.traefik-http.service: api@internal
     ports:
-      - 8080:80
-    restart: on-failure:5
+      - 80:80
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik.yml:/etc/traefik/traefik.yml:ro

@@ -1,0 +1,18 @@
+api:
+  dashboard: true
+entryPoints:
+  web:
+    address: :80
+global:
+  checkNewVersion: false
+  sendAnonymousUsage: false
+accessLog: {}
+log:
+  level: INFO
+providers:
+  docker:
+    watch: true
+    endpoint: "unix:///var/run/docker.sock"
+    exposedByDefault: true
+    # See also https://doc.traefik.io/traefik/providers/docker/#defaultrule
+    defaultRule: "Host(`{{ .Name }}.localhost`)"
