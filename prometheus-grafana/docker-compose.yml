@@ -2,7 +2,6 @@ version: "3.5"
 
 volumes:
   grafana-data:
-  prometheus-conf:
   prometheus-data:
 
 networks:
@@ -56,5 +55,5 @@ services:
     security_opt:
       - no-new-privileges
     volumes:
-      - prometheus-conf:/etc/prometheus
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
       - prometheus-data:/prometheus
