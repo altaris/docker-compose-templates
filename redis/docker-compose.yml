@@ -10,6 +10,8 @@ volumes:
 
 services:
   redis:
+    # For persistence
+    # command: ["redis-server", "--save", "60", "1"]
     image: redis
     volumes:
       - redis-data:/data
