@@ -27,7 +27,7 @@ services:
       traefik.http.services.redis-commander.loadbalancer.server.port: 8081
       traefik.http.routers.redis-commander-http.rule: Host(`redis.localhost`)
     ports:
-      - 8080:8081
+      - 8081:8081
     restart: on-failure:5
   traefik:
     image: traefik
