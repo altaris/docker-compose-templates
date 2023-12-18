@@ -1,3 +1,6 @@
+# grafana           -> http://grafana.localhost
+# traefik dashboard -> http://traefik.localhost
+
 version: "3.5"
 
 volumes:
@@ -27,6 +30,9 @@ services:
     environment:
       - GF_USERS_ALLOW_SIGN_UP=false
     image: grafana/grafana
+    labels:
+      traefik.http.services.grafana.loadbalancer.server.port: 3000
+      traefik.http.routers.grafana-http.rule: Host(`redis.localhost`)
     networks:
       - monitor
     ports:
@@ -57,3 +63,14 @@ services:
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
       - prometheus-data:/prometheus
+  traefik:
+    image: traefik
+    labels:
+      traefik.http.routers.traefik-http.service: api@internal
+      traefik.http.routers.traefik-http.rule: Host(`traefik.localhost`)
+      traefik.http.services.traefik.loadbalancer.server.port: 8080
+    ports:
+      - 80:80
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik.yml:/etc/traefik/traefik.yml:ro

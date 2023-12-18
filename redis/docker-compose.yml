@@ -1,7 +1,5 @@
-# redis-commander is accessible via http://redis-commander-STACK_NAME.localhost
-# By default, `STACK_NAME` is the directory name, so `redis` in this case:
-# http://redis-commander-redis.localhost . Likewise, the traefik dashboard is
-# at http://traefik-redis.localhost
+# redis-commander   -> http://redis.localhost
+# traefik dashboard -> http://traefik.localhost
 
 version: "3.5"
 
@@ -27,13 +25,16 @@ services:
     image: ghcr.io/joeferner/redis-commander
     labels:
       traefik.http.services.redis-commander.loadbalancer.server.port: 8081
-    # ports:
-    #   - 8080:8081
+      traefik.http.routers.redis-commander-http.rule: Host(`redis.localhost`)
+    ports:
+      - 8080:8081
     restart: on-failure:5
   traefik:
     image: traefik
     labels:
       traefik.http.routers.traefik-http.service: api@internal
+      traefik.http.routers.traefik-http.rule: Host(`traefik.localhost`)
+      traefik.http.services.traefik.loadbalancer.server.port: 8080
     ports:
       - 80:80
     volumes:

@@ -15,4 +15,4 @@ providers:
     endpoint: "unix:///var/run/docker.sock"
     exposedByDefault: true
     # See also https://doc.traefik.io/traefik/providers/docker/#defaultrule
-    defaultRule: "Host(`{{ .Name }}.localhost`)"
+    # defaultRule: "Host(`{{ .Name }}.localhost`)"

@@ -1,3 +1,6 @@
+# portainer         -> http://portainer.localhost
+# traefik dashboard -> http://traefik.localhost
+
 version: "3.5"
 
 volumes:
@@ -8,6 +11,9 @@ services:
     command: --no-analytics
     container_name: portainer
     image: portainer/portainer-ce
+    labels:
+      traefik.http.services.portainer.loadbalancer.server.port: 9000
+      traefik.http.routers.portainer-http.rule: Host(`portainer.localhost`)
     ports:
       - 9000:9000
     restart: always
@@ -16,3 +22,14 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - portainer-data:/data
+  # traefik:
+  #   image: traefik
+  #   labels:
+  #     traefik.http.routers.traefik-http.service: api@internal
+  #     traefik.http.routers.traefik-http.rule: Host(`traefik.localhost`)
+  #     traefik.http.services.traefik.loadbalancer.server.port: 8080
+  #   ports:
+  #     - 80:80
+  #   volumes:
+  #     - /var/run/docker.sock:/var/run/docker.sock
+  #     - ./traefik.yml:/etc/traefik/traefik.yml:ro
