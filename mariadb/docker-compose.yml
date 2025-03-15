@@ -22,12 +22,12 @@ services:
     environment:
       PMA_HOST: mariadb
       PMA_PORT: 3306
-    image: phpmyadmin/phpmyadmin
+    image: phpmyadmin
     labels:
-      traefik.http.services.phpmyadmin.loadbalancer.server.port: 8080
+      traefik.http.services.phpmyadmin.loadbalancer.server.port: 80
       traefik.http.routers.phpmyadmin-http.rule: Host(`phpmyadmin.localhost`)
     ports:
-      - 8080:8080
+      - 8080:80
   traefik:
     image: traefik
     labels:
