@@ -10,7 +10,7 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
-    image: mongo
+    image: mongodb/mongodb-community-server
     volumes:
       - mongo-conf:/data/configdb
       - mongo-data:/data/db
@@ -18,17 +18,9 @@ services:
     depends_on:
       - mongo
     environment:
-      ME_CONFIG_BASICAUTH_USERNAME: ${ME_CONFIG_BASICAUTH_USERNAME}
-      ME_CONFIG_BASICAUTH_PASSWORD: ${ME_CONFIG_BASICAUTH_PASSWORD}
-      # ME_CONFIG_MONGODB_ENABLE_ADMIN: false
-      # ME_CONFIG_MONGODB_AUTH_DATABASE:
-      # ME_CONFIG_MONGODB_AUTH_USERNAME: ${ME_CONFIG_MONGODB_AUTH_USERNAME}
-      # ME_CONFIG_MONGODB_AUTH_PASSWORD: ${ME_CONFIG_MONGODB_AUTH_PASSWORD}
+      ME_CONFIG_MONGODB_URL: mongodb://${MONGODB_INITDB_ROOT_USERNAME}:${MONGODB_INITDB_ROOT_PASSWORD}@mongo
       ME_CONFIG_MONGODB_ENABLE_ADMIN: true
-      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_INITDB_ROOT_USERNAME}
-      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
-      ME_CONFIG_MONGODB_PORT: 27017
-      ME_CONFIG_MONGODB_SERVER: mongo
+      ME_CONFIG_BASICAUTH_ENABLED: false
     image: mongo-express
     labels:
       traefik.http.services.mongo-express.loadbalancer.server.port: 8081
