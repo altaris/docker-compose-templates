@@ -1,8 +1,6 @@
 # mongo-express     -> http://mongo.localhost
 # traefik dashboard -> http://traefik.localhost
 
-version: "3.5"
-
 volumes:
   mongo-conf:
   mongo-data:

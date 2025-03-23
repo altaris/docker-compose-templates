@@ -1,8 +1,6 @@
 # grafana           -> http://grafana.localhost
 # traefik dashboard -> http://traefik.localhost
 
-version: "3.5"
-
 volumes:
   grafana-data:
   prometheus-data:

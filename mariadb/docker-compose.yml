@@ -1,8 +1,6 @@
 # phpmyadmin        -> http://phpmyadmin.localhost
 # traefik dashboard -> http://traefik.localhost
 
-version: "3.5"
-
 volumes:
   mariadb-data:
 
